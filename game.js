@@ -1,4 +1,3 @@
-const buttonColors = ["green", "red", "yellow", "blue"];
 const buttons = [$("#green"), $("#red"), $("#yellow"), $("#blue")]
 
 const playSound = {
@@ -25,19 +24,18 @@ const playSound = {
 }
 
 var currentSequence = [];
+var speed = 1;
 
 function genSequence(sequenceLength) {
     let newSequence = [];
     for (let i=sequenceLength; i>0; i--) {
         newSequence.push(Math.floor(Math.random() * 4));
     }
-    console.log("Sequence list generated | " + newSequence.length + " Length");
-    console.log(newSequence)
     currentSequence = newSequence;
 }
 
 function buttonAnimation (buttonObject) {
-    buttonObject.fadeOut(50).fadeIn(50);
+    buttonObject.fadeOut(50 * speed).fadeIn(50 * speed);
     playSound[buttonObject.attr("id")]();
 }
 
@@ -72,9 +70,9 @@ function sleep(ms) {
 
 async function playSequence() {
     for (let index = 0; index < count; index++) {
-        await sleep(500);
+        await sleep(500 * speed);
         buttonAnimation(buttons[currentSequence[index]]);
-        await sleep(500);
+        await sleep(500 * speed);
     }
 }
 
@@ -99,15 +97,8 @@ $(".btn").click(function(event) {
     }
 })
 
-genSequence(50);
+genSequence(100);
 var count = 0;
-console.log(count);
-// var gameOn = true;
-// while (gameOn) {
-//     await sleep(1000);
-//     count++;
-//
-// }
 
 function runGame() {
     if (JSON.stringify(userSequence) == JSON.stringify(currentSequence.slice(0, count))) {
@@ -116,21 +107,17 @@ function runGame() {
         clearUserSequence();
         playSequence();
     }
+
+    if (speed > 0.25) {
+        speed -= 0.01;
+    }
+
+    if (count === 100) {
+        genSequence(100);
+        clearUserSequence();
+        count = 1;
+    }
 }
-
-// console.log(buttons[0])
-// $(".btn").click(function(object) {
-//     if (object.currentTarget.id === buttons[0].attr("id")) {
-//         buttonAnimation(buttons[0])
-//     } else if (object.currentTarget.id === buttons[1].attr("id")) {
-//         buttonAnimation(buttons[1])
-//     } else if (object.currentTarget.id === buttons[2].attr("id")) {
-//         buttonAnimation(buttons[2])
-//     } else if (object.currentTarget.id === buttons[3].attr("id")) {
-//         buttonAnimation(buttons[3])
-//     }
-// })
-
 
 var gameStarted = false;
 $(document).keypress(function(event) {
