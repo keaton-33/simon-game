@@ -23,8 +23,7 @@ const playSound = {
     }
 }
 
-var currentSequence = [];
-var speed = 1;
+
 
 function genSequence(sequenceLength) {
     let newSequence = [];
@@ -63,7 +62,6 @@ function updateHeader(string) {
     $("h1").html(string);
 }
 
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -97,9 +95,6 @@ $(".btn").click(function(event) {
     }
 })
 
-genSequence(100);
-var count = 0;
-
 function runGame() {
     if (JSON.stringify(userSequence) == JSON.stringify(currentSequence.slice(0, count))) {
         count++;
@@ -119,7 +114,12 @@ function runGame() {
     }
 }
 
+var currentSequence = [];
+var speed = 1;
+genSequence(100);
+var count = 0;
 var gameStarted = false;
+
 $(document).keypress(function(event) {
     if (!gameStarted) {
         count++;
@@ -128,4 +128,5 @@ $(document).keypress(function(event) {
         playSequence();
     }
 })
+
 
